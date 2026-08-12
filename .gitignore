@@ -1,0 +1,13 @@
+# Credenciales locales — nunca subir al repo
+.env
+.env.*
+!.env.example
+
+# Supabase CLI
+supabase/.branches
+supabase/.temp
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
