@@ -7,6 +7,9 @@
 supabase/.branches
 supabase/.temp
 
+# Node
+node_modules/
+
 # Sistema
 Thumbs.db
 desktop.ini
