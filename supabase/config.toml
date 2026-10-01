@@ -248,6 +248,27 @@ otp_expiry = 3600
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
 
+# Correos de Auth con la identidad de Barber Shop (1/10/2026). Los .html los
+# genera supabase/templates/generar.mjs; en el proyecto real se cargaron con
+# la API de administracion, junto con el SMTP de Brevo (ver
+# supabase/templates/README.md). Los asuntos tienen que coincidir con
+# CORREOS en generar.mjs.
+[auth.email.template.confirmation]
+subject = "Confirme su correo para activar su cuenta de Barber Shop"
+content_path = "./supabase/templates/confirmacion.html"
+
+[auth.email.template.recovery]
+subject = "Restablezca su contraseña de Barber Shop"
+content_path = "./supabase/templates/recuperacion.html"
+
+[auth.email.template.email_change]
+subject = "Confirme su nuevo correo en Barber Shop"
+content_path = "./supabase/templates/cambio_correo.html"
+
+[auth.email.template.magic_link]
+subject = "Su enlace para ingresar a Barber Shop"
+content_path = "./supabase/templates/enlace_acceso.html"
+
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
 # enabled = true

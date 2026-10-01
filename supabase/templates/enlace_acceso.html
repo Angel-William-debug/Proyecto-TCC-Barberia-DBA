@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<title>{{ if .Data.nombre }}Hola, {{ .Data.nombre }}{{ else }}Hola{{ end }} · Barber Shop</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body style="margin:0;padding:0;background-color:#FAF7F2;">
+  <!-- Lo que se lee en la bandeja junto al asunto, antes de abrir el correo. -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#FAF7F2;">Ingrese a su cuenta con un toque.</div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FAF7F2;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;">
+
+          <!-- Franja de marca -->
+          <tr>
+            <td style="background-color:#14110F;border-radius:12px 12px 0 0;padding:28px 32px;" align="center">
+              <img src="https://proyecto-tcc-barberia-frontend-web.vercel.app/icon.png" width="56" height="56" alt="" style="display:block;border:0;border-radius:12px;margin:0 auto 12px;">
+              <div style="font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:28px;line-height:32px;font-weight:700;letter-spacing:2px;color:#F7F3EC;">
+                BARBER<span style="color:#C9922B;">SHOP</span>
+              </div>
+            </td>
+          </tr>
+          <!-- Filete de laton bajo la franja -->
+          <tr><td style="background-color:#C9922B;height:4px;line-height:4px;font-size:0;">&nbsp;</td></tr>
+
+          <!-- Contenido -->
+          <tr>
+            <td style="background-color:#FFFFFF;border:1px solid #E7E1D7;border-top:0;border-radius:0 0 12px 12px;padding:36px 32px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr><td>
+                <p style="margin:0 0 8px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:16px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#855B19;">Ingreso</p>
+                <h1 style="margin:0 0 20px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:26px;line-height:32px;font-weight:600;color:#14110F;">{{ if .Data.nombre }}Hola, {{ .Data.nombre }}{{ else }}Hola{{ end }}</h1>
+                <p style="margin:0 0 16px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:24px;color:#5C544B;">Toque el botón para ingresar a su cuenta de Barber Shop sin escribir la contraseña.</p>
+                </td></tr>
+
+                <!-- Boton. Tabla con fondo y no solo el enlace: Outlook ignora el relleno de un <a>. -->
+                <tr>
+                  <td align="center" style="padding:12px 0 28px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" bgcolor="#C9922B" style="border-radius:8px;">
+                          <a href="{{ .ConfirmationURL }}" target="_blank"
+                             style="display:inline-block;padding:14px 32px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:20px;font-weight:600;color:#14110F;text-decoration:none;border-radius:8px;">Ingresar</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- Aviso -->
+                <tr>
+                  <td style="background-color:#FBF4E4;border-left:3px solid #C9922B;border-radius:4px;padding:14px 16px;">
+                    <p style="margin:0;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:20px;color:#5C544B;">⏱ El enlace vence en <strong>una hora</strong> y sirve una sola vez.</p>
+                  </td>
+                </tr>
+
+                <!-- Enlace en texto, para cuando el boton no se ve -->
+                <tr>
+                  <td style="padding-top:24px;">
+                    <p style="margin:0 0 6px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;line-height:18px;color:#6B6257;">¿El botón no funciona? Copie esta dirección en su navegador:</p>
+                    <p style="margin:0;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;word-break:break-all;"><a href="{{ .ConfirmationURL }}" style="color:#855B19;">{{ .ConfirmationURL }}</a></p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Pie -->
+          <tr>
+            <td align="center" style="padding:24px 16px 0;">
+              <p style="margin:0 0 6px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;color:#6B6257;">Si usted no lo pidió, ignore este correo.</p>
+              <p style="margin:0;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;color:#6B6257;">Barber Shop · Asunción, Paraguay · Este es un correo automático, no hace falta responderlo.</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
