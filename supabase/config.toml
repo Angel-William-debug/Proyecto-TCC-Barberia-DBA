@@ -412,3 +412,8 @@ enabled = true
 # declarative_schema_path = "./database"
 # JSON string passed through to pg-delta SQL formatting.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
+
+# La llama la base por pg_net, no un usuario: se protege con el secreto
+# AVISOS_PUSH_SECRETO en vez de la sesion. Ver functions/avisos-push/index.ts.
+[functions.avisos-push]
+verify_jwt = false
