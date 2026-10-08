@@ -258,7 +258,7 @@ subject = "Confirme su correo para activar su cuenta de Barber Shop"
 content_path = "./supabase/templates/confirmacion.html"
 
 [auth.email.template.recovery]
-subject = "Restablezca su contraseña de Barber Shop"
+subject = "Su código para restablecer la contraseña de Barber Shop"
 content_path = "./supabase/templates/recuperacion.html"
 
 [auth.email.template.email_change]

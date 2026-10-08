@@ -53,7 +53,10 @@ const SANS = "'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif";
 
 const SALUDO = '{{ if .Data.nombre }}Hola, {{ .Data.nombre }}{{ else }}Hola{{ end }}';
 
-function correo({ preencabezado, etiqueta, titulo, parrafos, boton, aviso, pie }) {
+// `codigo: true` muestra el codigo de un solo uso ({{ .Token }}) en lugar del
+// boton con enlace: es lo que usa la recuperacion de contraseña desde el
+// 8/10/2026, que se escribe en la pantalla de la web o de la app.
+function correo({ preencabezado, etiqueta, titulo, parrafos, boton, aviso, pie, codigo = false }) {
   const cuerpo = parrafos
     .map(
       (p) =>
@@ -102,7 +105,17 @@ function correo({ preencabezado, etiqueta, titulo, parrafos, boton, aviso, pie }
                 ${cuerpo}
                 </td></tr>
 
-                <!-- Boton. Tabla con fondo y no solo el enlace: Outlook ignora el relleno de un <a>. -->
+${
+  codigo
+    ? `                <!-- El codigo, grande y en monoespaciada: se lee y se copia sin confundir
+                     un 0 con una O. Sin enlace: el codigo sirve igual en la web y en la app. -->
+                <tr>
+                  <td align="center" style="padding:8px 0 28px;">
+                    <p style="margin:0 0 8px;font-family:${SANS};font-size:13px;line-height:18px;color:${C.textoTerciario};">Su código</p>
+                    <div style="display:inline-block;padding:16px 28px;background-color:${C.hueso};border:1px dashed ${C.ambar500};border-radius:8px;font-family:'JetBrains Mono',Consolas,'Courier New',monospace;font-size:32px;line-height:36px;font-weight:700;letter-spacing:6px;color:${C.texto};">{{ .Token }}</div>
+                  </td>
+                </tr>`
+    : `                <!-- Boton. Tabla con fondo y no solo el enlace: Outlook ignora el relleno de un <a>. -->
                 <tr>
                   <td align="center" style="padding:12px 0 28px;">
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0">
@@ -114,7 +127,8 @@ function correo({ preencabezado, etiqueta, titulo, parrafos, boton, aviso, pie }
                       </tr>
                     </table>
                   </td>
-                </tr>
+                </tr>`
+}
 
                 <!-- Aviso -->
                 <tr>
@@ -123,13 +137,17 @@ function correo({ preencabezado, etiqueta, titulo, parrafos, boton, aviso, pie }
                   </td>
                 </tr>
 
-                <!-- Enlace en texto, para cuando el boton no se ve -->
+${
+  codigo
+    ? ''
+    : `                <!-- Enlace en texto, para cuando el boton no se ve -->
                 <tr>
                   <td style="padding-top:24px;">
                     <p style="margin:0 0 6px;font-family:${SANS};font-size:13px;line-height:18px;color:${C.textoTerciario};">¿El botón no funciona? Copie esta dirección en su navegador:</p>
                     <p style="margin:0;font-family:${SANS};font-size:12px;line-height:18px;word-break:break-all;"><a href="{{ .ConfirmationURL }}" style="color:${C.ambar700};">{{ .ConfirmationURL }}</a></p>
                   </td>
-                </tr>
+                </tr>`
+}
               </table>
             </td>
           </tr>
@@ -169,17 +187,17 @@ export const CORREOS = {
     }),
   },
   recuperacion: {
-    asunto: 'Restablezca su contraseña de Barber Shop',
+    asunto: 'Su código para restablecer la contraseña de Barber Shop',
     html: correo({
-      preencabezado: 'Recibimos un pedido para cambiar la contraseña de su cuenta.',
+      preencabezado: 'Su código para elegir una contraseña nueva está adentro.',
       etiqueta: 'Seguridad de la cuenta',
       titulo: `${SALUDO}`,
       parrafos: [
         'Recibimos un pedido para restablecer la contraseña de la cuenta <strong style="color:#14110F;">{{ .Email }}</strong>.',
-        'Toque el botón para elegir una contraseña nueva.',
+        'Escriba este código en la pantalla de Barber Shop, en la web o en la app, y elija su contraseña nueva.',
       ],
-      boton: 'Elegir una contraseña nueva',
-      aviso: '⏱ El enlace vence en <strong>una hora</strong> y sirve una sola vez.',
+      codigo: true,
+      aviso: '⏱ El código vence en <strong>una hora</strong> y sirve una sola vez. No se lo pase a nadie: la barbería nunca se lo va a pedir.',
       pie: 'Si usted no lo pidió, ignore este correo: su contraseña sigue siendo la misma.',
     }),
   },

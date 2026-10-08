@@ -10,7 +10,7 @@
 </head>
 <body style="margin:0;padding:0;background-color:#FAF7F2;">
   <!-- Lo que se lee en la bandeja junto al asunto, antes de abrir el correo. -->
-  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#FAF7F2;">Recibimos un pedido para cambiar la contraseña de su cuenta.</div>
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#FAF7F2;">Su código para elegir una contraseña nueva está adentro.</div>
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FAF7F2;">
     <tr>
@@ -37,37 +37,26 @@
                 <p style="margin:0 0 8px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:16px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#855B19;">Seguridad de la cuenta</p>
                 <h1 style="margin:0 0 20px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:26px;line-height:32px;font-weight:600;color:#14110F;">{{ if .Data.nombre }}Hola, {{ .Data.nombre }}{{ else }}Hola{{ end }}</h1>
                 <p style="margin:0 0 16px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:24px;color:#5C544B;">Recibimos un pedido para restablecer la contraseña de la cuenta <strong style="color:#14110F;">{{ .Email }}</strong>.</p>
-                <p style="margin:0 0 16px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:24px;color:#5C544B;">Toque el botón para elegir una contraseña nueva.</p>
+                <p style="margin:0 0 16px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:24px;color:#5C544B;">Escriba este código en la pantalla de Barber Shop, en la web o en la app, y elija su contraseña nueva.</p>
                 </td></tr>
 
-                <!-- Boton. Tabla con fondo y no solo el enlace: Outlook ignora el relleno de un <a>. -->
+                <!-- El codigo, grande y en monoespaciada: se lee y se copia sin confundir
+                     un 0 con una O. Sin enlace: el codigo sirve igual en la web y en la app. -->
                 <tr>
-                  <td align="center" style="padding:12px 0 28px;">
-                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td align="center" bgcolor="#C9922B" style="border-radius:8px;">
-                          <a href="{{ .ConfirmationURL }}" target="_blank"
-                             style="display:inline-block;padding:14px 32px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:20px;font-weight:600;color:#14110F;text-decoration:none;border-radius:8px;">Elegir una contraseña nueva</a>
-                        </td>
-                      </tr>
-                    </table>
+                  <td align="center" style="padding:8px 0 28px;">
+                    <p style="margin:0 0 8px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;line-height:18px;color:#6B6257;">Su código</p>
+                    <div style="display:inline-block;padding:16px 28px;background-color:#FAF7F2;border:1px dashed #C9922B;border-radius:8px;font-family:'JetBrains Mono',Consolas,'Courier New',monospace;font-size:32px;line-height:36px;font-weight:700;letter-spacing:6px;color:#14110F;">{{ .Token }}</div>
                   </td>
                 </tr>
 
                 <!-- Aviso -->
                 <tr>
                   <td style="background-color:#FBF4E4;border-left:3px solid #C9922B;border-radius:4px;padding:14px 16px;">
-                    <p style="margin:0;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:20px;color:#5C544B;">⏱ El enlace vence en <strong>una hora</strong> y sirve una sola vez.</p>
+                    <p style="margin:0;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;line-height:20px;color:#5C544B;">⏱ El código vence en <strong>una hora</strong> y sirve una sola vez. No se lo pase a nadie: la barbería nunca se lo va a pedir.</p>
                   </td>
                 </tr>
 
-                <!-- Enlace en texto, para cuando el boton no se ve -->
-                <tr>
-                  <td style="padding-top:24px;">
-                    <p style="margin:0 0 6px;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;line-height:18px;color:#6B6257;">¿El botón no funciona? Copie esta dirección en su navegador:</p>
-                    <p style="margin:0;font-family:'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:18px;word-break:break-all;"><a href="{{ .ConfirmationURL }}" style="color:#855B19;">{{ .ConfirmationURL }}</a></p>
-                  </td>
-                </tr>
+
               </table>
             </td>
           </tr>
