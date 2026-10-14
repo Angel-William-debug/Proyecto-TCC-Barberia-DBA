@@ -438,3 +438,10 @@ enabled = true
 # AVISOS_PUSH_SECRETO en vez de la sesion. Ver functions/avisos-push/index.ts.
 [functions.avisos-push]
 verify_jwt = false
+
+# La llama pg_cron cada 10 minutos con la cabecera x-avisos-secreto (el mismo
+# secreto que avisos-push). Sin verificar JWT: la clave anonima es un JWT
+# valido y con ella cualquiera podria disparar la corrida. Ver
+# functions/recordatorios/index.ts y la migracion 20261014120000.
+[functions.recordatorios]
+verify_jwt = false

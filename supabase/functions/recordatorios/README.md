@@ -1,77 +1,55 @@
 # Edge Function: recordatorios (RN-050)
 
-Código listo, **sin desplegar todavía** — decisión del equipo el 18/8/2026: activarla
-requiere una API key real de Resend que no estaba disponible en esta sesión.
+**Activa desde el 14/10/2026.** Manda por correo el recordatorio de cada turno,
+`minutos_antes_recordatorio` antes de la hora (configuración del sistema; hoy 1440,
+un día antes). La llama `pg_cron` cada 10 minutos (migración `20261014120000`).
 
-## Qué hace
+## Cómo envía
 
-Manda el recordatorio de un turno por correo, `minutos_antes_recordatorio` antes de
-la hora de la cita. Ver el comentario al inicio de `index.ts` para el detalle del
-flujo (RN-050, RN-042).
+Por la **API transaccional de Brevo**: la misma cuenta que manda los correos de Auth
+(por SMTP) y los reportes del panel (por API). Se escribió para Resend el 19/8/2026,
+pero Resend sin dominio propio solo entrega a la dirección del dueño, así que nunca se
+activó.
 
-## Para activarla
+Secretos del proyecto (Supabase → Edge Functions → Secrets). **No van en git:**
 
-1. **Conseguir una API key de Resend** — [resend.com](https://resend.com), plan
-   gratuito alcanza para probar. Verificar un dominio propio antes de mandar a
-   destinatarios reales, o usar `onboarding@resend.dev` solo para pruebas.
+| Secreto | Qué es |
+|---|---|
+| `BREVO_API_KEY` | API key de Brevo (`xkeysib-…`), la misma que `apps/web/.env.local` del FRONTEND |
+| `CORREO_REMITENTE` | el remitente verificado en Brevo |
+| `AVISOS_PUSH_SECRETO` | el secreto compartido con la base, el mismo que `avisos-push` |
 
-2. **Configurar los secretos del proyecto** (no van en ningún `.env` versionado):
+## Quién la llama
 
-   ```powershell
-   supabase secrets set RESEND_API_KEY=re_xxxxxxxx --project-ref tmuntxynyopzbhzmulux
-   supabase secrets set RESEND_FROM_EMAIL="Barber Shop <notificaciones@tudominio.com>" --project-ref tmuntxynyopzbhzmulux
-   ```
+Solo la base, con la cabecera `x-avisos-secreto`, que el `pg_cron` lee del Vault
+(`avisos_push_secreto`). Tiene `verify_jwt = false` en `config.toml`, porque la clave
+anónima es un JWT válido y con ella cualquiera podría disparar la corrida. Sin el
+secreto responde 401.
 
-   `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` los inyecta Supabase solo en toda
-   Edge Function: no hace falta configurarlos.
+## Qué hace en cada corrida
 
-3. **Desplegar**:
+1. Lee `v_proximos_turnos`: turnos pendientes o confirmados de las próximas 24 horas,
+   sin recordatorio enviado.
+2. Se queda con los que ya entraron en la ventana de aviso.
+3. Por cada uno:
+   - Sin correo: anota `sin_email` y no reintenta.
+   - Con correo: lo manda y anota `enviado`, o `fallido` con reintento hasta
+     `max_reintentos_notif` (RN-042).
 
-   ```powershell
-   supabase functions deploy recordatorios --project-ref tmuntxynyopzbhzmulux
-   ```
+Devuelve un resumen: `{ revisados, dentro_del_umbral, enviados, sin_email, fallidos }`.
 
-4. **Probarla a mano** antes de programarla, para ver el resultado sin esperar:
+El correo tiene la identidad de Barber Shop (la misma franja y tarjeta que las
+plantillas de Auth): saludo, día y hora destacados, servicios, y cómo cancelar si no
+puede venir.
 
-   ```powershell
-   curl -X POST "https://tmuntxynyopzbhzmulux.supabase.co/functions/v1/recordatorios" `
-     -H "Authorization: Bearer $env:SUPABASE_SERVICE_ROLE_KEY"
-   ```
+## Desplegar y probar
 
-   Devuelve un resumen: `{ revisados, dentro_del_umbral, enviados, sin_email, fallidos }`.
+```powershell
+npx supabase functions deploy recordatorios --project-ref tmuntxynyopzbhzmulux --no-verify-jwt
+```
 
-5. **Programarla** cada 5-10 minutos. La forma más simple es el panel de Supabase
-   (*Edge Functions → recordatorios → Cron*), sin escribir SQL. La alternativa por
-   SQL, con `pg_cron` y `pg_net` (las dos extensiones deben estar habilitadas
-   primero, *Database → Extensions*):
+Para probarla a mano hay que mandar la cabecera `x-avisos-secreto` con el valor del
+Vault. **Ojo: manda correos de verdad** a los clientes con turno dentro de la ventana.
 
-   ```sql
-   -- NO APLICAR sin haber hecho los pasos 1-3 primero: sin la funcion
-   -- desplegada y el secreto configurado, esto llamaria a una URL que
-   -- todavia no hace nada util.
-   select cron.schedule(
-     'recordatorios-turnos',
-     '*/10 * * * *',
-     $$
-     select net.http_post(
-       url := 'https://tmuntxynyopzbhzmulux.supabase.co/functions/v1/recordatorios',
-       headers := jsonb_build_object(
-         'Authorization', 'Bearer ' || current_setting('app.settings.service_role_key', true)
-       )
-     );
-     $$
-   );
-   ```
-
-   Esto **no se agregó como migración a propósito**: aplicarla sin la función
-   desplegada dejaría un cron llamando a una URL inexistente cada 10 minutos, sin
-   ningún beneficio. Cuando decidan activarla, conviene agregarla como una
-   migración nueva (nunca editar una ya pusheada), con la clave de servicio
-   guardada como secreto de base de datos, no en texto plano dentro del SQL.
-
-## Verificación
-
-Sin datos reales cargados en la base todavía (ver CLAUDE.md, sección 0), no hay
-turnos próximos contra los que probar el flujo completo end-to-end. Una vez que
-haya citas reales en las próximas 24 horas, la llamada manual del paso 4 es la
-forma más rápida de confirmar que el correo llega.
+Probada el 14/10/2026 con un turno de prueba a nombre de `h50896455+recordatorio@gmail.com`,
+ya borrado. Se enviaron dos recordatorios por Brevo y los dos quedaron como `enviado`.
