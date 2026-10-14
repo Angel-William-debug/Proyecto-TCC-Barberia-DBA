@@ -195,6 +195,13 @@ Deno.serve(async (peticion) => {
           proveedor: 'brevo',
           intentos: 0,
         });
+      } else {
+        // Lo volvieron a poner en cola desde el panel (vista 87) pero el
+        // cliente sigue sin correo: vuelve a quedar como tal, no en cola.
+        await supabase
+          .from('notificaciones')
+          .update({ estado_envio: 'sin_email', mensaje: 'Sin correo registrado: no se pudo enviar el recordatorio.' })
+          .eq('id_notificacion', existente.id_notificacion);
       }
       continue;
     }
