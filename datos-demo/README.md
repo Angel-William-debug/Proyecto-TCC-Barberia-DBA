@@ -16,6 +16,7 @@ portal del cliente con historial.
 | `01_catalogo.sql` | Servicios, categorías, productos, proveedores, la receta de dos servicios y los datos de la barbería |
 | `02_operacion.sql` | 15 clientes, 6 barberos, ~95 turnos completados de los últimos 3 meses, cobros, facturas, comisiones, cancelaciones y la agenda de la semana |
 | `03_jornada_de_hoy.sql` | Los turnos del día en curso, que es lo primero que muestra la agenda |
+| `04_septiembre_octubre.sql` | Cargado el 15/10/2026 para la defensa: ~160 turnos completados del 1/9 al 14/10 con sus cobros, insumos y comisiones, ~50 turnos hasta el 31/10, y cierra los turnos viejos que habían quedado pendientes. Depende de `now()`: ver su encabezado |
 
 Las cuentas de Auth (`auth.users`) hay que crearlas antes; `00_` solo las
 enlaza. Ver la sección «Cuentas de prueba» de `CLAUDE.md`.
