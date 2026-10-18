@@ -1,5 +1,9 @@
 # Datos de demostración
 
+> **Desde el 18/10/2026 la base tiene la carga de `06_carga_completa/`**, que borró todo lo
+> cargado por `00_` a `05_` y lo reemplazó por seis meses de operación. Esos archivos quedan
+> como historia; ver `06_carga_completa/README.md`.
+
 **Esto NO son migraciones y no se aplican solas.** Están fuera de
 `supabase/migrations/` a propósito: una migración corre en cada despliegue, y
 sembrar clientes y precios inventados en cada despliegue sería un error.
