@@ -21,7 +21,7 @@ migración.** Se ejecuta a mano y una sola vez.
 | Clientes | 200, con barbero preferido y frecuencia propia. 55 sin correo, 4 desactivados |
 | Catálogo | 20 servicios en 5 categorías, 40 productos en 6 categorías y 8 proveedores |
 | Recetas | 70 líneas de receta en 20 servicios |
-| Turnos pasados | ~3.200: 86 % completados, 7 % cancelados (con motivo, o desde el portal), 7 % no asistió |
+| Turnos pasados | ~2.840: 85 % completados, 7 % cancelados (con motivo, o desde el portal), 7 % no asistió |
 | Turnos futuros | ~430, más cerca del día más llenos |
 | Generado por la base | ~2.600 servicios realizados con su comisión (las anteriores a octubre, liquidadas) y ~9.800 consumos de insumos con su movimiento |
 | Cobros y facturas | ~2.460 cobros (56 en dos partes, 20 sin cobrar en la última semana) y ~840 facturas |
